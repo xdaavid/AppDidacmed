@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación DidacMed 2.0 | BioSignals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-color: #3f51b5; /* Indigo */
+            --secondary-color: #303f9f;
+            --accent-color: #ff4081;
+            --bg-light: #f8f9fa;
+        }
+        
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .code-header {
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 5px 15px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .normativa-card {
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.3s;
+        }
+        
+        .normativa-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .architecture-diagram {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="bi bi-heart-pulse-fill"></i> DidacMed 2.0</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#arquitectura">Arquitectura</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#codigo">Desarrollo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#normativas">Normativas</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Sistema BioSignals DidacMed 2.0</h1>
+            <p class="lead">Desarrollo de Software Biomédico para adquisición, procesamiento y telemetría de señales fisiológicas (ECG, EMG, EOG).</p>
+            <a href="#codigo" class="btn btn-light btn-lg mt-3 fw-bold text-primary">Ver Documentación Técnica</a>
+        </div>
+    </section>
+
+    <section id="arquitectura" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 text-primary fw-bold">Arquitectura del Sistema</h2>
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="architecture-diagram">
+                        
+                        <p class="text-muted mt-2"><small>Figura 1: Flujo de comunicación BLE (ESP32 -> Flutter)</small></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3>Flujo de Datos</h3>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent"><i class="bi bi-cpu text-primary"></i> <strong>Adquisición:</strong> ESP32 digitaliza la señal analógica.</li>
+                        <li class="list-group-item bg-transparent"><i class="bi bi-bluetooth text-primary"></i> <strong>Transmisión:</strong> Envío mediante BLE (Bluetooth Low Energy) optimizado.</li>
+                        <li class="list-group-item bg-transparent"><i class="bi bi-phone text-primary"></i> <strong>Procesamiento:</strong> Flutter decodifica, filtra y renderiza en tiempo real.</li>
+                        <li class="list-group-item bg-transparent"><i class="bi bi-cloud-arrow-up text-primary"></i> <strong>Telemetría:</strong> Sincronización por lotes (Batching) hacia Firebase Realtime Database.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="codigo" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 text-primary fw-bold">Estructura del Código</h2>
+
+            <div class="row mb-5">
+                <div class="col-lg-6">
+                    <h3><i class="bi bi-window-sidebar"></i> Interfaz de Usuario (UI)</h3>
+                    <p>La interfaz se construyó priorizando la claridad clínica. Se utilizó <code>fl_chart</code> para la visualización de alto rendimiento en tiempo real.</p>
+                    <ul>
+                        <li><strong>Tema Indigo:</strong> Color asociado a la tecnología médica y confianza.</li>
+                        <li><strong>Gestión de Estado:</strong> Uso de <code>setState</code> y Streams para actualización reactiva de la gráfica sin bloquear el hilo principal.</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="code-header">main.dart (Extracto UI)</div>
+<pre><code class="language-dart">class GraphScreen extends StatefulWidget {
+  // Configuración de la pantalla de monitoreo
+  // Utiliza StreamBuilder para redibujar la gráfica eficientemente
+  StreamBuilder<List<double>>(
+    stream: ble.dataStream, // Flujo de datos reactivo
+    builder: (context, snapshot) {
+      // Renderizado de LineChart optimizado
+      return LineChart(...); 
+    },
+  ),
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-6 order-lg-2">
+                    <h3><i class="bi bi-bluetooth"></i> Servicio de Comunicación BLE</h3>
+                    <p>Implementación del patrón <strong>Singleton</strong> para gestionar la conexión bluetooth en toda la app.</p>
+                    <div class="alert alert-info">
+                        <strong>Safety Patch:</strong> Se implementó un buffer de seguridad para reconstruir paquetes de datos fragmentados, crucial para evitar la pérdida de muestras médicas.
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    <div class="code-header">bluetooth_service.dart (Procesamiento)</div>
+<pre><code class="language-dart">// PARCHE DE SEGURIDAD PARA INTEGRIDAD DE DATOS
+void _processRealData(List<int> data) {
+    // Decodificación y acumulación en buffer
+    String incoming = utf8.decode(data);
+    _dataBuffer += incoming;
+
+    // Procesamiento solo cuando el paquete está completo (\n)
+    while (_dataBuffer.contains('\n')) {
+        // Lógica de limpieza y parseo a Double
+        // Garantiza que solo datos válidos lleguen a la gráfica
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-6">
+                    <h3><i class="bi bi-database-fill"></i> Telemetría y Nube</h3>
+                    <p>Para cumplir con requisitos de eficiencia energética y ancho de banda, no se sube dato por dato.</p>
+                    <p>Se implementó una estrategia de <strong>Batching (Lotes)</strong>:</p>
+                    
+                    <ul>
+                        <li>Los datos se acumulan en un buffer local.</li>
+                        <li>Se suben en una sola transacción HTTP cada 50 muestras.</li>
+                        <li>Reduce el consumo de batería y datos móviles del dispositivo.</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="code-header">firebase_signal_service.dart (Optimización)</div>
+<pre><code class="language-dart">// ESTRATEGIA DE LOTES (BATCHING)
+void agregarDato(double ecg, double emg, double eog) {
+    _buffer.add({...}); // Agregar a memoria temporal
+
+    // Solo subir si alcanzamos el tamaño del lote (50)
+    if (_buffer.length >= _tamanoLote) {
+      _subirLote();
+    }
+}
+
+void _subirLote() {
+    // Envío masivo en una sola petición de red
+    ref.update(actualizacionMasiva); 
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="normativas" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 text-primary fw-bold">Normativas y Cumplimiento Técnico</h2>
+            <p class="text-center mb-5 w-75 mx-auto">La construcción de la aplicación siguió lineamientos basados en estándares de Ingeniería de Software para Dispositivos Médicos.</p>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card normativa-card h-100 p-4">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="bi bi-shield-check"></i> ISO 62304 (Ciclo de Vida de Software)</h4>
+                            <p class="card-text">Aunque es un prototipo académico, se siguió la arquitectura de segregación de software:</p>
+                            <ul>
+                                <li>Separación clara entre la adquisición de datos (BluetoothService) y la lógica de negocio.</li>
+                                <li>Control de versiones y gestión de errores robusta (<code>try-catch</code> blocks en conexiones críticas).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card normativa-card h-100 p-4">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="bi bi-activity"></i> Integridad de Datos (Data Integrity)</h4>
+                            <p class="card-text">Para asegurar que la señal clínica no se corrompe:</p>
+                            <ul>
+                                <li><strong>Buffer de Reconstrucción:</strong> El código implementa un buffer en <code>_processRealData</code> para evitar la pérdida de paquetes BLE.</li>
+                                <li><strong>Validación de Tipos:</strong> Uso de <code>double.tryParse</code> para evitar cierres inesperados por ruido en la señal.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card normativa-card h-100 p-4">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="bi bi-eye"></i> IEC 62366 (Usabilidad)</h4>
+                            <p class="card-text">Diseño centrado en el usuario clínico:</p>
+                            <ul>
+                                <li>Uso de colores estándar (Verde para ECG) para rápida identificación.</li>
+                                <li>Interfaz limpia con controles grandes (Start/Stop) para facilitar su uso en entornos de movimiento.</li>
+                                <li>Feedback visual inmediato (Gráficas en tiempo real).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card normativa-card h-100 p-4">
+                        <div class="card-body">
+                            <h4 class="card-title"><i class="bi bi-wifi"></i> Eficiencia Energética</h4>
+                            <p class="card-text">Optimización para dispositivos móviles:</p>
+                            <ul>
+                                <li>Implementación de carga por lotes a Firebase para reducir el uso de radio.</li>
+                                <li>Gestión adecuada de suscripciones (<code>dispose()</code>) para liberar memoria y Bluetooth cuando no se usa.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2024 DidacMed - Ingeniería Biomédica</p>
+            <small class="text-muted">Desarrollado con Flutter & Firebase</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-dart.min.js"></script>
+</body>
+</html>
